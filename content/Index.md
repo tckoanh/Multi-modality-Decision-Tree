@@ -1,5 +1,5 @@
 ---
-title: The TUD starterkit for open publishing with JupyterBook
+title: Multi-modality Decision Tree
 site:
   hide_outline: true
   hide_toc: true
@@ -17,14 +17,14 @@ no-update-date: true
 
 ## The TUD starterkit for open publishing with JupyterBook
 
-a quick setup for your open publishing project.
+This is a tutorial for learning Decision Trees, created as part of a Bachelor’s thesis for the CSE3000 Research Project course of the Faculty of Electrical Engineering, Mathematics and Computer Science (EEMCS) at Delft University of Technology.
 
-{button}`Use this template <https://github.com/new?template_name=starterkit&template_owner=TUD-JB-OS>`  
+It is intended as an open educational resource that introduces first-year Computer Science students to the core principles of Decision Trees. The tutorial assumes no prior background in Machine Learning.
 
-Originally created by  
+This Jupyter Notebook template was originally created by  
 *Freek Pols*
 
-![](figures/cover.png)
+![](figures/background.jpg)
 
 +++
 
