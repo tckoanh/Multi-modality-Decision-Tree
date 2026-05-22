@@ -3,7 +3,7 @@ version: 1
 project:
   title: Multi-modality Decision Tree
   # description:
-  keywords: [Decsion Tree, Machine Learning, Supervised Learning, Classification Tree, Gini Impurity, Entropy, Information Gain]
+  keywords: [Machine Learning, Supervised Learning, Decsion Tree, Classification Tree, Regression Tree, Gini Impurity, Entropy, Information Gain]
 
   github: https://tckoanh.github.io/Multi-modality-Decision-Tree/
   thumbnail: style/thumbnail.jpg
