@@ -27,7 +27,7 @@ This Jupyter Notebook template was originally created by
 
 +++
 
-# Learning objectives:
+### Learning objectives:
 After completing this tutorial, you should be able to:
 1. Explain the purpose of a Decision Tree classifier and describe its role in supervised Machine Learning.
 2. Understand how a dataset is recursively partitioned into smaller regions during tree construction.
@@ -36,7 +36,7 @@ After completing this tutorial, you should be able to:
 5. Understand the strengths and limitations of each splitting criterion, and why certain criteria are more commonly used in practice.
 6. Apply Decision Tree concepts to simple two-dimensional classification problems.
 
-# About this tutorial:
+### About this tutorial:
 It is aimed to explain topics in Decision Trees as simplest and most intuitive as possible, using instructional tools such as analogies, figures, interactive widgets, and worked examples to help student better understand the concepts as well as mathematical formulas in Decision Trees
 
 The first chapter serves as a refresher to Logarithms and Probability to subsequent materials, you may skip this section if you are already comfortable with these topics
