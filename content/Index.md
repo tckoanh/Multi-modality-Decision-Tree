@@ -37,6 +37,6 @@ After completing this tutorial, you should be able to:
 6. Apply Decision Tree concepts to simple two-dimensional classification problems.
 
 ### About this tutorial:
-It is aimed to explain topics in Decision Trees as simplest and most intuitive as possible, using instructional tools such as analogies, figures, interactive widgets, and worked examples to help student better understand the concepts as well as mathematical formulas in Decision Trees
+It is aimed to explain topics in Decision Trees as simplest and most intuitive as possible, using instructional tools such as analogies, figures, interactive widgets, and worked examples to help students better understand the concepts as well as mathematical formulas in Decision Trees.
 
-The first chapter serves as a refresher to Logarithms and Probability to subsequent materials, you may skip this section if you are already comfortable with these topics
+The first chapter serves as a refresher to Logarithms and Probability to subsequent materials, you may skip this section if you are already comfortable with these topics.
