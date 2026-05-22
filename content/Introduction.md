@@ -1,12 +1,11 @@
----
-abstract: |
-    In this demo, we demonstrate how Jupyter Book can be used to create and publish a content rich paper that includes 
-    interactive elements such as code cells, visualizations, and multimedia. We will walk through the process of setting 
-    up a Jupyter Book, adding content, and deploying the final product online.
----
-
 # Introduction
 
+---
+abstract: |
+    Decision Tree is a commonly used algorithm in **Supervised Learning**, for **Classification** and **Regression** tasks. It has the shape of a flowchart, each branch represents a question, and depends on your answer, you move on to the next step. It breaks downs complex dataset into a more easy-to-interpret structures
+---
+
+## A brief overview of Machine Learning:
 Jupyter Book has been rebuild from ground up using the MyST engine [@doi:10.25080/hwcj9957]. This allows to export content in multiple output formats including HTML, PDF and docx. In this paper we present an overview of the possibilities and demonstrate its working.
 
 In an introduction. you often cite. Than can be done in various ways, either using a .bib file or directly using the doi.
