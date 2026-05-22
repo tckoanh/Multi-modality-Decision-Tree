@@ -3,12 +3,13 @@ abstract: |
     Decision Tree is a commonly used algorithm in **Supervised Learning**, for **Classification** and **Regression** tasks. It has the shape of a flowchart, each branch represents a question, and depends on your answer, you move on to the next step. It breaks downs complex dataset into a more easy-to-interpret structures
 ---
 
-# Introduction
+# Introduction to Decision Tree
 
 ## A brief overview of Machine Learning:
-Jupyter Book has been rebuild from ground up using the MyST engine [@doi:10.25080/hwcj9957]. This allows to export content in multiple output formats including HTML, PDF and docx. In this paper we present an overview of the possibilities and demonstrate its working.
+Humans acquire knowledge about the world around them through past experiences, whereas a computer can only follow instructions given by humans. But what if we can train machines to do what we can do at a much faster rate, by learning existing data as input? This is, to some extent, the definition of Machine Learning: the ability to learn, grow, and adapt of machines when exposed to unseen data.
 
-In an introduction. you often cite. Than can be done in various ways, either using a .bib file or directly using the doi.
+Machine Learning iis commonly divided into three main categories: Supervised Learning, Unsupervised Learning, and Reinforcement Learning, each serves a different purpose and/or task.
+![alt text](figures/MLoverview.png)
 
 **cite with doi**
 - `[@doi:10.25080/hwcj9957]` resulting in [@doi:10.25080/hwcj9957]
