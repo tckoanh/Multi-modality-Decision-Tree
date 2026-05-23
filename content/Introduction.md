@@ -4,15 +4,26 @@ abstract: |
 ---
 
 # Introduction to Decision Tree
-In this chapter, we learn about what exactly us a tree structure and how a Decision Tree is used for Classification and Regression tasks.
-
-## Structure of a Tree
-A tree data structure, much like a real tree, grows from a root node and expands into multiple branches, with leaves at the ends.
-- The root, unlike in nature, is positioned at the top and is considered an internal node. 
-- Internal nodes (branches) have both incoming and outgoing edges, while external nodes (leaves) only have incoming edges.
-
 
 ![alt text](figures/tree_structure.png)
 
 ## What is a Decision Tree?
-Decision Tree is a Supervised Learning model, the model learns through a dataset of data with labels, and it slowly builds a hierarchy structure based on those inputs to help you reach a decision
+A decision tree is a machine learning model that helps make decisions by asking a series of simple questions.
+
+It learns from examples that already have answers, and then uses those patterns to make predictions on new data.
+
+## Structure of a Tree
+A tree data structure, much like a real tree, grows from a root node and expands into multiple branches, with leaves at the ends.
+- The root, unlike in nature, is positioned at the top and is considered an internal node. 
+- Branches (internal nodes) have both incoming and outgoing edges, while leaves (external nodes) only have incoming edges.
+- Any two nodes connected by an edge have a parent–child relationship, with the edge pointing from the parent to the child.
+- Nodes that share the same parent are called siblings.
+
+## How Decision Trees Work
+Think of it like a guessing game:
+
+Each branch asks a yes/no (or simple) question
+Each answer takes you down a different path
+You keep going until you reach a final answer at a leaf
+
+## How to pick the smartest question for each branch?
