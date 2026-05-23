@@ -12,5 +12,13 @@ Machine Learning is commonly divided into three main categories: Supervised Lear
 
 ![alt text](figures/MLoverview.png)
 
+## Structure of a Tree
+Much like a real tree, a tree data structure grows at the root and expands into multiple branches, with leaves emerging at the ends. However, unlike a natural tree, the root in a data structure is at the top.
+Branches (internal nodes) are nodes that have both incoming and outgoing edges.
+Leaves (external nodes) are nodes that **only have incoming edges**.
+
+
+![alt text](figures/tree_structure.png)
 
 ## What is a Decision Tree?
+Decision Tree is a Supervised Learning model, and as you can see from the diagram above, the model learns through a dataset of data with labels, and it slowly builds a hierarchy structure based on those inputs to help you reach a decision
