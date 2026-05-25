@@ -71,7 +71,7 @@ svg{display:block;width:100%}
 </div>
 <script>
 const PLOT=480;
-const CN={blobs:{a:"Group A",b:"Group B"},moons:{a:"Upper moon",b:"Lower moon"},stripes:{a:"Below line",b:"Above line"},spiral:{a:"Spiral arm A",b:"Spiral arm B"},xor:{a:"Same quadrant",b:"Opposite quadrant"},circular:{a:"Inner core",b:"Outer ring"}};
+const CN={blobs:{a:"Group A",b:"Group B"},moons:{a:"Group A",b:"Group B"},stripes:{a:"Group A",b:"Group B"},spiral:{a:"Group A",b:"Group B"},xor:{a:"Group A",b:"Group B"},circular:{a:"Group A",b:"Group B"}};
 const clamp=v=>Math.max(0,Math.min(1,v));
 function rng(s){s=s>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/0xffffffff}}
 function blobs(){const r=rng(7),p=[],c=[[.28,.32,0],[.72,.7,1],[.7,.28,0],[.3,.72,1]];for(const[cx,cy,l]of c)for(let i=0;i<22;i++)p.push({x:clamp(cx+(r()-.5)*.22),y:clamp(cy+(r()-.5)*.22),label:l});return p}
