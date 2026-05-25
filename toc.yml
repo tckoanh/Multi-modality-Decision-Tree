@@ -8,8 +8,8 @@ project:
     - file: content/Build.ipynb
     - file: content/Methods.md
     - file: content/Conclusion.md
-    - title: Appendix
-      children:
-        - file: content/Cheatsheet.md
-        - file: errorlog.md
-        - file: README.md
+    # - title: Appendix
+    #   children:
+    #     - file: content/Cheatsheet.md
+    #     - file: errorlog.md
+    #     - file: README.md
