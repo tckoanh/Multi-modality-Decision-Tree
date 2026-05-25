@@ -1,0 +1,152 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Decision Tree</title>
+<style>
+:root{--bg:#fafafa;--fg:#0a0a0a;--muted:#f1f5f9;--mutfg:#64748b;--card:#fff;--border:#e2e8f0;--primary:#0f172a;--a:#3b82f6;--b:#ef4444;--split:#f59e0b}
+*{box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
+body{margin:0;background:var(--bg);color:var(--fg);padding:16px}
+.wrap{max-width:1100px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.controls{display:grid;grid-template-columns:1fr auto auto;gap:16px;align-items:end}
+label{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--mutfg);font-weight:500;display:block;margin-bottom:6px}
+input[type=range]{width:100%;accent-color:#A8D3A8}
+select,button{font-size:13px;padding:8px 12px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer}
+button.primary{background:#A8D3A8;color:#1a1a1a;border-color:#A8D3A8}
+button.primary:hover{opacity:.9}
+.grid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(max-width:800px){.controls{grid-template-columns:1fr}}
+h2{font-size:14px;margin:0 0 12px;font-weight:600}
+svg{display:block;width:100%}
+.row{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--mutfg);margin-top:10px;gap:8px}
+.acc{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px;margin-top:12px;padding:10px;border:1px solid var(--border);border-radius:6px}
+.bar{height:6px;background:var(--muted);border-radius:3px;overflow:hidden;margin-top:4px}
+.bar>div{height:100%;transition:width .3s}
+.tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:600;margin-right:6px}
+.good{background:#d1fae5;color:#065f46}.warn{background:#fef3c7;color:#92400e}.bad{background:#fee2e2;color:#991b1b}
+.note{background:var(--muted);padding:10px;border-radius:6px;font-size:12px;margin-top:10px;color:var(--mutfg)}
+.note code{background:#fff;padding:1px 5px;border-radius:3px;color:var(--fg)}
+.draw{display:flex;gap:4px;font-size:11px}
+.draw button{padding:4px 8px;font-size:11px;display:flex;align-items:center;gap:6px}
+.draw button.on-a{background:var(--a);color:#fff;border-color:var(--a)}
+.draw button.on-b{background:var(--b);color:#fff;border-color:var(--b)}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+</style></head>
+<body><div class="wrap">
+<div class="card controls">
+  <div><label>Tree depth: <span id="dval">0</span></label>
+    <input type="range" id="depth" min="0" max="8" value="0"/>
+    <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--mutfg);margin-top:2px"><span>0 (no split)</span><span>8 (deep)</span></div>
+  </div>
+  <div style="display:flex;gap:6px"><button class="primary" id="play">▶ Auto-grow</button><button id="reset">Reset</button></div>
+  <div><label>2D data shape</label>
+    <select id="ds">
+      <option value="blobs">Four Clusters</option><option value="moons">Two Moons</option>
+      <option value="stripes">Diagonal Split</option><option value="spiral">Spiral</option>
+      <option value="xor">XOR</option><option value="circular">Circular</option>
+    </select>
+  </div>
+</div>
+<div class="grid">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <h2 style="margin:0">Feature space</h2>
+      <div class="draw"><button id="dA"><span class="dot" style="background:var(--a)"></span>+ <span id="lA">A</span></button><button id="dB"><span class="dot" style="background:var(--b)"></span>+ <span id="lB">B</span></button></div>
+    </div>
+    <svg id="plot" viewBox="-26 0 510 510" style="aspect-ratio:1;background:var(--muted);border-radius:6px"></svg>
+    <div class="row"><p style="margin:0">Filled dots = <b>training</b> data. Hollow rings = <b>test</b> data.</p>
+      <button id="tog">Hide test</button></div>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><h2 style="margin:0">The tree</h2><div id="stats" style="font-size:12px;color:var(--mutfg)"></div></div>
+    <svg id="tree" viewBox="0 0 480 320" style="aspect-ratio:3/2"></svg>
+    <div class="acc">
+      <div><div style="font-size:10px;text-transform:uppercase;color:var(--mutfg)">Train accuracy</div>
+       <div style="display:flex;align-items:center;gap:8px"><div class="bar" style="flex:1"><div id="trBar"></div></div><span id="trN" style="width:36px;text-align:right;font-weight:500">0%</span></div></div>
+      <div><div style="font-size:10px;text-transform:uppercase;color:var(--mutfg)">Test accuracy</div>
+        <div style="display:flex;align-items:center;gap:8px"><div class="bar" style="flex:1"><div id="teBar"></div></div><span id="teN" style="width:36px;text-align:right;font-weight:500">0%</span></div></div>
+      <div style="grid-column:1/-1;border-top:1px solid var(--border);padding-top:8px"><span id="fitTag" class="tag">—</span><span id="fitHint" style="color:var(--mutfg)"></span></div>
+    </div>
+    <div class="note" id="note">No splits yet. Increase depth to make the tree start asking questions about the data.</div>
+  </div>
+</div>
+</div>
+<script>
+const PLOT=480;
+const CN={blobs:{a:"Group A",b:"Group B"},moons:{a:"Group A",b:"Group B"},stripes:{a:"Group A",b:"Group B"},spiral:{a:"Group A",b:"Group B"},xor:{a:"Group A",b:"Group B"},circular:{a:"Group A",b:"Group B"}};
+const clamp=v=>Math.max(0,Math.min(1,v));
+function rng(s){s=s>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/0xffffffff}}
+function blobs(){const r=rng(7),p=[],c=[[.28,.32,0],[.72,.7,1],[.7,.28,0],[.3,.72,1]];for(const[cx,cy,l]of c)for(let i=0;i<22;i++)p.push({x:clamp(cx+(r()-.5)*.22),y:clamp(cy+(r()-.5)*.22),label:l});return p}
+function moons(){const r=rng(3),p=[];for(let i=0;i<50;i++){const t=i/49*Math.PI;p.push({x:clamp(.5+.35*Math.cos(t)-.1+(r()-.5)*.06),y:clamp(.55-.3*Math.sin(t)+(r()-.5)*.06),label:0});p.push({x:clamp(.5+.35*Math.cos(t+Math.PI)+.1+(r()-.5)*.06),y:clamp(.45+.3*Math.sin(t)+(r()-.5)*.06),label:1})}return p}
+function stripes(){const r=rng(11),p=[];for(let i=0;i<100;i++){const x=r(),y=r();p.push({x,y,label:x+y>1?1:0})}return p}
+function spiral(){const r=rng(5),p=[],n=60;for(let i=0;i<n;i++){const t=i/n*3.5*Math.PI,rd=.05+i/n*.4,nx=(r()-.5)*.04,ny=(r()-.5)*.04;p.push({x:clamp(.5+rd*Math.cos(t)+nx),y:clamp(.5+rd*Math.sin(t)+ny),label:0});p.push({x:clamp(.5-rd*Math.cos(t)+nx),y:clamp(.5-rd*Math.sin(t)+ny),label:1})}return p}
+function xor(){const r=rng(13),p=[];for(let i=0;i<120;i++){const x=r(),y=r();p.push({x,y,label:(x>.5)===(y>.5)?0:1})}return p}
+function circ(){const r=rng(17),p=[];for(let i=0;i<50;i++){const t=r()*2*Math.PI,rd=r()*.18;p.push({x:clamp(.5+rd*Math.cos(t)),y:clamp(.5+rd*Math.sin(t)),label:0})}for(let i=0;i<70;i++){const t=r()*2*Math.PI,rd=.3+r()*.12;p.push({x:clamp(.5+rd*Math.cos(t)),y:clamp(.5+rd*Math.sin(t)),label:1})}return p}
+const DS={blobs,moons,stripes,spiral,xor,circular:circ};
+function split(pts,seed=42){const r=rng(seed),ix=pts.map((p,i)=>({p,k:r()}));ix.sort((a,b)=>a.k-b.k);const c=Math.floor(ix.length*.7);return{train:ix.slice(0,c).map(o=>o.p),test:ix.slice(c).map(o=>o.p)}}
+function gini(p){if(!p.length)return 0;const p1=p.filter(x=>x.label===1).length/p.length;return 1-p1*p1-(1-p1)*(1-p1)}
+function best(pts){if(pts.length<2)return null;const b=gini(pts);let bs=null;for(const f of["x","y"]){const v=[...new Set(pts.map(p=>p[f]))].sort((a,b)=>a-b);for(let i=0;i<v.length-1;i++){const t=(v[i]+v[i+1])/2,L=pts.filter(p=>p[f]<t),R=pts.filter(p=>p[f]>=t);if(!L.length||!R.length)continue;const g=L.length/pts.length*gini(L)+R.length/pts.length*gini(R),gain=b-g;if(!bs||gain>bs.gain)bs={split:{feature:f,threshold:t,gini:g},gain}}}return bs?bs.split:null}
+function maj(p){const o=p.filter(x=>x.label===1).length;return o>=p.length-o?1:0}
+let NID=0;
+function build(pts,reg,d,md){const id=NID++,n={id,region:reg,points:pts,depth:d},pure=pts.length&&pts.every(p=>p.label===pts[0].label);if(d>=md||pts.length<2||pure){n.prediction=pts.length?maj(pts):0;return n}const s=best(pts);if(!s){n.prediction=pts.length?maj(pts):0;return n}n.split=s;const L=pts.filter(p=>p[s.feature]<s.threshold),R=pts.filter(p=>p[s.feature]>=s.threshold);n.left=build(L,s.feature==="x"?{...reg,x1:s.threshold}:{...reg,y1:s.threshold},d+1,md);n.right=build(R,s.feature==="x"?{...reg,x0:s.threshold}:{...reg,y0:s.threshold},d+1,md);return n}
+function leaves(n){return n.split?[...leaves(n.left),...leaves(n.right)]:[n]}
+function inter(n){return n.split?[n,...inter(n.left),...inter(n.right)]:[]}
+function acc(n,pts){if(!pts.length)return 0;const pr=p=>{let c=n;while(c.split)c=p[c.split.feature]<c.split.threshold?c.left:c.right;return c.prediction};return pts.filter(p=>pr(p)===p.label).length/pts.length}
+function layout(root){const lvs=[],walk=n=>n.split?(walk(n.left),walk(n.right)):lvs.push(n);walk(root);const xb=new Map();lvs.forEach((l,i)=>xb.set(l.id,(i+.5)/lvs.length));const nodes=[],edges=[],md=Math.max(...leaves(root).map(l=>l.depth),1);const place=(n,d)=>{let x;if(!n.split)x=xb.get(n.id);else{const L=place(n.left,d+1),R=place(n.right,d+1);x=(L.x+R.x)/2;const me={node:n,x,y:d/Math.max(1,md)};nodes.push(me);edges.push([me,L]);edges.push([me,R]);return me}const me={node:n,x,y:d/Math.max(1,md)};nodes.push(me);return me};place(root,0);return{nodes,edges}}
+
+let datasetKey="blobs",d=split(DS.blobs()),train=d.train,test=d.test,showTest=true,depth=0,playing=false,playId=null,draw="off",hover=null;
+
+const $=id=>document.getElementById(id);
+function el(t,a={}){const e=document.createElementNS("http://www.w3.org/2000/svg",t);for(const k in a)e.setAttribute(k,a[k]);return e}
+function accColor(v){return v<.5?"#f97316":v<.75?"#eab308":"#22c55e"}
+const FNAME={x:"Feature 1",y:"Feature 2"};
+
+function render(){
+  NID=0;
+  const tree=build(train,{x0:0,x1:1,y0:0,y1:1},0,depth);
+  const L=leaves(tree),I=inter(tree);
+  const trA=acc(tree,train),teA=acc(tree,test);
+  const latest=I.length?I.reduce((a,b)=>b.depth>a.depth?b:a):null;
+
+  // plot
+  const plot=$("plot");plot.innerHTML="";
+  for(const lf of L){const r=lf.region,f=lf.prediction===1?"rgba(239,68,68,.22)":"rgba(59,130,246,.22)";plot.appendChild(el("rect",{x:r.x0*PLOT,y:(1-r.y1)*PLOT,width:(r.x1-r.x0)*PLOT,height:(r.y1-r.y0)*PLOT,fill:f,stroke:"rgba(0,0,0,.08)","stroke-width":.5}))}
+  if(latest){const s=latest.split,r=latest.region;const ln=el("line",{stroke:"var(--split)","stroke-width":2.5,"stroke-dasharray":"6 4"});if(s.feature==="x"){ln.setAttribute("x1",s.threshold*PLOT);ln.setAttribute("x2",s.threshold*PLOT);ln.setAttribute("y1",(1-r.y1)*PLOT);ln.setAttribute("y2",(1-r.y0)*PLOT)}else{ln.setAttribute("y1",(1-s.threshold)*PLOT);ln.setAttribute("y2",(1-s.threshold)*PLOT);ln.setAttribute("x1",r.x0*PLOT);ln.setAttribute("x2",r.x1*PLOT)}const an=el("animate",{attributeName:"stroke-dashoffset",from:"0",to:"20",dur:"1.2s",repeatCount:"indefinite"});ln.appendChild(an);plot.appendChild(ln)}
+  if(hover!=null){const n=[...L,...I].find(x=>x.id===hover);if(n){const r=n.region;plot.appendChild(el("rect",{x:r.x0*PLOT,y:(1-r.y1)*PLOT,width:(r.x1-r.x0)*PLOT,height:(r.y1-r.y0)*PLOT,fill:"none",stroke:"var(--primary)","stroke-width":2}))}}
+  for(const p of train)plot.appendChild(el("circle",{cx:p.x*PLOT,cy:(1-p.y)*PLOT,r:5,fill:p.label===1?"var(--b)":"var(--a)",stroke:"white","stroke-width":1.2}));
+  if(showTest)for(const p of test)plot.appendChild(el("circle",{cx:p.x*PLOT,cy:(1-p.y)*PLOT,r:5.5,fill:"none",stroke:p.label===1?"var(--b)":"var(--a)","stroke-width":2}));
+  for(const t of[0,.25,.5,.75,1]){plot.appendChild(el("line",{x1:t*PLOT,x2:t*PLOT,y1:PLOT-4,y2:PLOT,stroke:"rgba(0,0,0,.35)","stroke-width":1}));const tx=el("text",{x:t===0?6:t===1?PLOT-6:t*PLOT,y:PLOT-6,"font-size":10,"text-anchor":t===0?"start":t===1?"end":"middle",fill:"rgba(0,0,0,.6)"});tx.textContent=Math.round(t*100);plot.appendChild(tx);plot.appendChild(el("line",{x1:0,x2:4,y1:(1-t)*PLOT,y2:(1-t)*PLOT,stroke:"rgba(0,0,0,.35)","stroke-width":1}));const ty=el("text",{x:6,y:(1-t)*PLOT+(t===1?10:t===0?-6:3),"font-size":10,"text-anchor":"start",fill:"rgba(0,0,0,.6)"});ty.textContent=Math.round(t*100);plot.appendChild(ty)}
+  const xlab=el("text",{x:PLOT/2,y:PLOT+22,"text-anchor":"middle","font-size":13,"font-weight":600,fill:"rgba(0,0,0,.75)"});xlab.textContent="Feature 1";plot.appendChild(xlab);
+  const ylab=el("text",{x:-12,y:PLOT/2,"text-anchor":"middle","font-size":13,"font-weight":600,fill:"rgba(0,0,0,.75)",transform:`rotate(-90 -12 ${PLOT/2})`});ylab.textContent="Feature 2";plot.appendChild(ylab);
+
+  // tree svg
+  const ts=$("tree");ts.innerHTML="";const lo=layout(tree),W=480,H=320,PAD=30,px=x=>PAD+x*(W-2*PAD),py=y=>PAD+y*(H-2*PAD);
+  for(const[a,b]of lo.edges)ts.appendChild(el("line",{x1:px(a.x),y1:py(a.y),x2:px(b.x),y2:py(b.y),stroke:"rgba(0,0,0,.25)","stroke-width":1.2}));
+  for(const n of lo.nodes){const isL=!n.node.split,isH=hover===n.node.id,g=el("g");g.style.cursor="pointer";g.addEventListener("mouseenter",()=>{hover=n.node.id;render()});g.addEventListener("mouseleave",()=>{hover=null;render()});g.appendChild(el("circle",{cx:px(n.x),cy:py(n.y),r:isL?9:11,fill:isL?(n.node.prediction===1?"var(--b)":"var(--a)"):"var(--card)",stroke:isH?"var(--primary)":"rgba(0,0,0,.35)","stroke-width":isH?2.5:1.2}));if(!isL){const t=el("text",{x:px(n.x),y:py(n.y)-16,"text-anchor":"middle","font-size":10,fill:"var(--fg)"});t.textContent=`${FNAME[n.node.split.feature]} < ${Math.round(n.node.split.threshold*100)}`;ts.appendChild(t)}else{const t=el("text",{x:px(n.x),y:py(n.y)+3,"text-anchor":"middle","font-size":9,fill:"white","font-weight":600});t.textContent=n.node.points.length;ts.appendChild(t)}ts.appendChild(g)}
+
+  // text
+  $("stats").textContent=`${I.length} split${I.length===1?"":"s"} · ${L.length} ${L.length===1?"leaf":"leaves"}`;
+  $("trBar").style.width=(trA*100)+"%";$("trBar").style.background=accColor(trA);
+  $("teBar").style.width=(teA*100)+"%";$("teBar").style.background=accColor(teA);
+  $("trN").textContent=Math.round(trA*100)+"%";$("teN").textContent=Math.round(teA*100)+"%";
+  const gap=trA-teA;let fit;
+  if(depth<=1&&trA<.8)fit={l:"Underfitting",t:"warn",h:"Tree is too simple to capture the pattern."};
+  else if(gap>.15||(trA>.95&&teA<trA-.1))fit={l:"Overfitting",t:"bad",h:"Tree memorized training points; test accuracy is lagging."};
+  else fit={l:"Good fit",t:"good",h:"Train and test accuracy are close — the tree generalizes."};
+  $("fitTag").textContent=fit.l;$("fitTag").className="tag "+fit.t;$("fitHint").textContent=fit.h;
+  if(latest)$("note").innerHTML=`<b>Latest split:</b> <code>${FNAME[latest.split.feature]} &lt; ${Math.round(latest.split.threshold*100)}</code><div style="margin-top:4px">Chosen because it lowers Gini impurity the most. Resulting Gini: ${latest.split.gini.toFixed(2)}.</div>`;
+  else $("note").textContent="No splits yet. Increase depth to make the tree start asking questions about the data.";
+  $("lA").textContent=CN[datasetKey].a;$("lB").textContent=CN[datasetKey].b;
+  $("dval").textContent=depth;$("depth").value=depth;
+}
+
+$("depth").addEventListener("input",e=>{stopPlay();depth=+e.target.value;render()});
+$("ds").addEventListener("change",e=>{datasetKey=e.target.value;const s=split(DS[datasetKey]());train=s.train;test=s.test;depth=0;render()});
+$("play").addEventListener("click",()=>{depth=0;playing=true;$("play").textContent="Growing…";render();playId=setInterval(()=>{depth=Math.min(8,depth+1);if(depth>=8)stopPlay();render()},1200)});
+$("reset").addEventListener("click",()=>{stopPlay();depth=0;render()});
+$("tog").addEventListener("click",()=>{showTest=!showTest;$("tog").textContent=showTest?"Hide test":"Show test";render()});
+function stopPlay(){playing=false;if(playId){clearInterval(playId);playId=null}$("play").textContent="▶ Auto-grow"}
+$("dA").addEventListener("click",()=>{draw=draw===0?"off":0;$("dA").className=draw===0?"on-a":"";$("dB").className=""});
+$("dB").addEventListener("click",()=>{draw=draw===1?"off":1;$("dB").className=draw===1?"on-b":"";$("dA").className=""});
+$("plot").addEventListener("click",e=>{if(draw==="off")return;const r=$("plot").getBoundingClientRect();train.push({x:clamp((e.clientX-r.left)/r.width),y:clamp(1-(e.clientY-r.top)/r.height),label:draw});render()});
+
+render();
+</script></body></html>
