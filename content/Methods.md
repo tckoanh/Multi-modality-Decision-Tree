@@ -1,4 +1,4 @@
-# Methods
+# A worked example
 
 In this project, a starterkit provides you a set of tools, templates and workflows to have a head start on your project. We follow the logic below (not in pdf):
 
