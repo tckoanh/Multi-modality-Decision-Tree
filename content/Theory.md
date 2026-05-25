@@ -1,4 +1,4 @@
-# Theory
+# Math foundations
 
 We can have inline equations like $E=mc^2$ or display equations like:
 
