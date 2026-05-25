@@ -4,9 +4,9 @@ project:
     - file: content/Index.md
     - file: content/ML-Overview.md
     - file: content/Introduction.md
+    - file: content/Build.ipynb
     - file: content/Theory.md
     - file: content/Methods.md
-    - file: content/Results.ipynb
     - file: content/Conclusion.md
     - title: Appendix
       children:
