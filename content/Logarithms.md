@@ -151,6 +151,6 @@ $\log_b(x) = \frac{\log_a(x)}{\log_a(b)}$
 
 - Logarithm is the inverse of exponential functions
 - Defined on $(0,\infty)$
-- Converts multiplication into addition
+- **Converts multiplication into addition**
 - All algebraic identities follow from exponent laws
 - Fully determined by functional equation $f(xy)=f(x)+f(y)$
