@@ -42,7 +42,7 @@ extends:
   - toc.yml             # includes table of contents
   - export typst.yml    # includes export configurations
   - authors.yml         # includes author and contributor information
-  - options.yml         # includes project-specific options and metadata
+  # - options.yml         # includes project-specific options and metadata
   
 site:
   template: book-theme
