@@ -43,7 +43,7 @@
     <select id="dt-ds">
       <option value="blobs">Four Clusters</option><option value="moons">Two Moons</option>
       <option value="stripes">Diagonal Split</option><option value="spiral">Spiral</option>
-      <option value="xor">XOR</option><option value="circular">Circular</option>
+      <option value="xor">XOR</option>
     </select>
   </div>
 </div>
@@ -73,7 +73,7 @@
 </div></div>
 <script>
 const PLOT=480;
-const CN={blobs:{a:"Group A",b:"Group B"},moons:{a:"Group A",b:"Group B"},stripes:{a:"Group A",b:"Group B"},spiral:{a:"Group A",b:"Group B"},xor:{a:"Group A",b:"Group B"},circular:{a:"Group A",b:"Group B"}};
+const CN={blobs:{a:"Youth",b:"Adults"},moons:{a:"Approved loans",b:"Rejected loans"},stripes:{a:"Default",b:"Repay"},spiral:{a:"Red path",b:"Blue path"},xor:{a:"Buy",b:"Don't Buy"},circular:{a:"Inner core",b:"Outer ring"}};
 const clamp=v=>Math.max(0,Math.min(1,v));
 function rng(s){s=s>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/0xffffffff}}
 function blobs(){const r=rng(7),p=[],c=[[.28,.32,0],[.72,.7,1],[.7,.28,0],[.3,.72,1]];for(const[cx,cy,l]of c)for(let i=0;i<22;i++)p.push({x:clamp(cx+(r()-.5)*.22),y:clamp(cy+(r()-.5)*.22),label:l});return p}
@@ -100,7 +100,7 @@ const root=document.getElementById("decision-tree-demo");
 const $=id=>root.querySelector(`#dt-${id}`);
 function el(t,a={}){const e=document.createElementNS("http://www.w3.org/2000/svg",t);for(const k in a)e.setAttribute(k,a[k]);return e}
 function accColor(v){return v<.5?"#f97316":v<.75?"#eab308":"#22c55e"}
-const FNAME={x:"Feature 1",y:"Feature 2"};
+const FEATS={blobs:{x:"Weight",y:"Age"},moons:{x:"Spending",y:"Debt"},stripes:{x:"Income",y:"Employment duration"},spiral:{x:"X direction",y:"Y direction"},xor:{x:"Products price",y:"Product quality"},circular:{x:"Feature 1",y:"Feature 2"}};function fname(f){return FEATS[datasetKey][f]}function fshort(f){if(datasetKey==="moons")return f==="x"?"Spending":"Debt";if(datasetKey==="xor")return f==="x"?"Price":"Quality";if(datasetKey==="spiral")return f==="x"?"X":"Y";if(datasetKey==="stripes")return f==="x"?"Income":"Duration";if(datasetKey==="blobs")return f==="x"?"Weight":"Age";return fname(f)}function fval(f,v){const n=Math.round(v*100);if(n===0)return"0";if(datasetKey==="moons")return "$"+n+"K";if(datasetKey==="blobs"){if(f==="x")return n+"kg";return String(n);}if(datasetKey==="xor")return f==="x"?("$"+n):(n+"%");if(datasetKey==="stripes"){if(f==="x")return "$"+n+"K";const y=Math.round(v*100)/10;return (y%1===0?y.toFixed(0):y.toFixed(1));}return String(n)}function fcond(f,v){return fshort(f)+" < "+fval(f,v)}
 
 function render(){
   NID=0;
@@ -116,14 +116,14 @@ function render(){
   if(hover!=null){const n=[...L,...I].find(x=>x.id===hover);if(n){const r=n.region;plot.appendChild(el("rect",{x:r.x0*PLOT,y:(1-r.y1)*PLOT,width:(r.x1-r.x0)*PLOT,height:(r.y1-r.y0)*PLOT,fill:"none",stroke:"var(--primary)","stroke-width":2}))}}
   for(const p of train)plot.appendChild(el("circle",{cx:p.x*PLOT,cy:(1-p.y)*PLOT,r:5,fill:p.label===1?"var(--b)":"var(--a)",stroke:"white","stroke-width":1.2}));
   if(showTest)for(const p of test)plot.appendChild(el("circle",{cx:p.x*PLOT,cy:(1-p.y)*PLOT,r:5.5,fill:"none",stroke:p.label===1?"var(--b)":"var(--a)","stroke-width":2}));
-  for(const t of[0,.25,.5,.75,1]){plot.appendChild(el("line",{x1:t*PLOT,x2:t*PLOT,y1:PLOT-4,y2:PLOT,stroke:"rgba(0,0,0,.35)","stroke-width":1}));const tx=el("text",{x:t===0?6:t===1?PLOT-6:t*PLOT,y:PLOT-6,"font-size":10,"text-anchor":t===0?"start":t===1?"end":"middle",fill:"rgba(0,0,0,.6)"});tx.textContent=Math.round(t*100);plot.appendChild(tx);plot.appendChild(el("line",{x1:0,x2:4,y1:(1-t)*PLOT,y2:(1-t)*PLOT,stroke:"rgba(0,0,0,.35)","stroke-width":1}));const ty=el("text",{x:6,y:(1-t)*PLOT+(t===1?10:t===0?-6:3),"font-size":10,"text-anchor":"start",fill:"rgba(0,0,0,.6)"});ty.textContent=Math.round(t*100);plot.appendChild(ty)}
-  const xlab=el("text",{x:PLOT/2,y:PLOT+22,"text-anchor":"middle","font-size":13,"font-weight":600,fill:"rgba(0,0,0,.75)"});xlab.textContent="Feature 1";plot.appendChild(xlab);
-  const ylab=el("text",{x:-12,y:PLOT/2,"text-anchor":"middle","font-size":13,"font-weight":600,fill:"rgba(0,0,0,.75)",transform:`rotate(-90 -12 ${PLOT/2})`});ylab.textContent="Feature 2";plot.appendChild(ylab);
+  for(const t of[0,.25,.5,.75,1]){plot.appendChild(el("line",{x1:t*PLOT,x2:t*PLOT,y1:PLOT-4,y2:PLOT,stroke:"rgba(0,0,0,.35)","stroke-width":1}));const tx=el("text",{x:t===0?6:t===1?PLOT-6:t*PLOT,y:PLOT-6,"font-size":10,"text-anchor":t===0?"start":t===1?"end":"middle",fill:"rgba(0,0,0,.6)"});tx.textContent=fval("x",t);plot.appendChild(tx);plot.appendChild(el("line",{x1:0,x2:4,y1:(1-t)*PLOT,y2:(1-t)*PLOT,stroke:"rgba(0,0,0,.35)","stroke-width":1}));const ty=el("text",{x:6,y:(1-t)*PLOT+(t===1?10:t===0?-6:3),"font-size":10,"text-anchor":"start",fill:"rgba(0,0,0,.6)"});ty.textContent=fval("y",t);plot.appendChild(ty)}
+  const xlab=el("text",{x:PLOT/2,y:PLOT+22,"text-anchor":"middle","font-size":13,"font-weight":600,fill:"rgba(0,0,0,.75)"});xlab.textContent=fname("x");plot.appendChild(xlab);
+  const ylab=el("text",{x:-12,y:PLOT/2,"text-anchor":"middle","font-size":13,"font-weight":600,fill:"rgba(0,0,0,.75)",transform:`rotate(-90 -12 ${PLOT/2})`});ylab.textContent=fname("y");plot.appendChild(ylab);
 
   // tree svg
   const ts=$("tree");ts.innerHTML="";const lo=layout(tree),W=480,H=320,PAD=30,px=x=>PAD+x*(W-2*PAD),py=y=>PAD+y*(H-2*PAD);
   for(const[a,b]of lo.edges)ts.appendChild(el("line",{x1:px(a.x),y1:py(a.y),x2:px(b.x),y2:py(b.y),stroke:"rgba(0,0,0,.25)","stroke-width":1.2}));
-  for(const n of lo.nodes){const isL=!n.node.split,isH=hover===n.node.id,g=el("g");g.style.cursor="pointer";g.addEventListener("mouseenter",()=>{hover=n.node.id;render()});g.addEventListener("mouseleave",()=>{hover=null;render()});g.appendChild(el("circle",{cx:px(n.x),cy:py(n.y),r:isL?9:11,fill:isL?(n.node.prediction===1?"var(--b)":"var(--a)"):"var(--card)",stroke:isH?"var(--primary)":"rgba(0,0,0,.35)","stroke-width":isH?2.5:1.2}));if(!isL){const t=el("text",{x:px(n.x),y:py(n.y)-16,"text-anchor":"middle","font-size":10,fill:"var(--fg)"});t.textContent=`${FNAME[n.node.split.feature]} < ${Math.round(n.node.split.threshold*100)}`;ts.appendChild(t)}else{const t=el("text",{x:px(n.x),y:py(n.y)+3,"text-anchor":"middle","font-size":9,fill:"white","font-weight":600});t.textContent=n.node.points.length;ts.appendChild(t)}ts.appendChild(g)}
+  for(const n of lo.nodes){const isL=!n.node.split,isH=hover===n.node.id,g=el("g");g.style.cursor="pointer";g.addEventListener("mouseenter",()=>{hover=n.node.id;render()});g.addEventListener("mouseleave",()=>{hover=null;render()});g.appendChild(el("circle",{cx:px(n.x),cy:py(n.y),r:isL?9:11,fill:isL?(n.node.prediction===1?"var(--b)":"var(--a)"):"var(--card)",stroke:isH?"var(--primary)":"rgba(0,0,0,.35)","stroke-width":isH?2.5:1.2}));if(!isL){const t=el("text",{x:px(n.x),y:py(n.y)-16,"text-anchor":"middle","font-size":10,fill:"var(--fg)"});t.textContent=fcond(n.node.split.feature,n.node.split.threshold);ts.appendChild(t)}else{const t=el("text",{x:px(n.x),y:py(n.y)+3,"text-anchor":"middle","font-size":9,fill:"white","font-weight":600});t.textContent=n.node.points.length;ts.appendChild(t)}ts.appendChild(g)}
 
   // text
   $("stats").textContent=`${I.length} split${I.length===1?"":"s"} · ${L.length} ${L.length===1?"leaf":"leaves"}`;
@@ -135,7 +135,7 @@ function render(){
   else if(gap>.15||(trA>.95&&teA<trA-.1))fit={l:"Overfitting",t:"dt-bad",h:"Tree memorized training points; test accuracy is lagging."};
   else fit={l:"Good fit",t:"dt-good",h:"Train and test accuracy are close — the tree generalizes."};
   $("fitTag").textContent=fit.l;$("fitTag").className="dt-tag "+fit.t;$("fitHint").textContent=fit.h;
-  if(latest)$("note").innerHTML=`<b>Latest split:</b> <code>${FNAME[latest.split.feature]} &lt; ${Math.round(latest.split.threshold*100)}</code><div style="margin-top:4px">Chosen because it lowers Gini impurity the most. Resulting Gini: ${latest.split.gini.toFixed(2)}.</div>`;
+  if(latest)$("note").innerHTML=`<b>Latest split:</b> <code>${fcond(latest.split.feature,latest.split.threshold).replace("<","&lt;")}</code><div style="margin-top:4px">Chosen because it lowers Gini impurity the most. Resulting Gini: ${latest.split.gini.toFixed(2)}.</div>`;
   else $("note").textContent="No splits yet. Increase depth to make the tree start asking questions about the data.";
   $("lA").textContent=CN[datasetKey].a;$("lB").textContent=CN[datasetKey].b;
   $("dval").textContent=depth;$("depth").value=depth;
