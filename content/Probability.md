@@ -1,5 +1,7 @@
 # Probability
 
+This chapter provides a review of Probability and can be skipped if you already have a strong understanding of the topic.
+
 ## Probability basics
 
 A probability function satisfies:
