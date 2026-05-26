@@ -96,7 +96,7 @@ function layout(root){const lvs=[],walk=n=>n.split?(walk(n.left),walk(n.right)):
 
 let datasetKey="blobs",d=split(DS.blobs()),train=d.train,test=d.test,showTest=true,depth=0,playing=false,playId=null,draw="off",hover=null;
 
-const root=document.currentScript.closest(".decision-tree-demo-embed").querySelector("#decision-tree-demo");
+const root=document.getElementById("decision-tree-demo");
 const $=id=>root.querySelector(`#dt-${id}`);
 function el(t,a={}){const e=document.createElementNS("http://www.w3.org/2000/svg",t);for(const k in a)e.setAttribute(k,a[k]);return e}
 function accColor(v){return v<.5?"#f97316":v<.75?"#eab308":"#22c55e"}
