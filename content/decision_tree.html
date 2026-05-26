@@ -29,6 +29,7 @@
 #decision-tree-demo .dt-draw button.dt-on-a{background:var(--a);color:#fff;border-color:var(--a)}
 #decision-tree-demo .dt-draw button.dt-on-b{background:var(--b);color:#fff;border-color:var(--b)}
 #decision-tree-demo .dt-dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:0 0 auto}
+#decision-tree-demo .dt-desc{text-align:center;font-size:25px;color:black;margin-top:6px;padding:6px 0}
 #decision-tree-demo .dt-card>div:first-child{flex-wrap:wrap;gap:6px}
 @media(max-width:640px){#decision-tree-demo .dt-wrap{padding:4px}#decision-tree-demo .dt-grid{grid-template-columns:minmax(0,1fr)}#decision-tree-demo .dt-controls{grid-template-columns:minmax(0,1fr)}#decision-tree-demo .dt-acc{grid-template-columns:1fr}#decision-tree-demo select{width:100%}}
 </style>
@@ -70,10 +71,12 @@
     <div class="dt-note" id="dt-note">No splits yet. Increase depth to make the tree start asking questions about the data.</div>
   </div>
 </div>
+<div class="dt-desc" id="dt-desc"></div>
 </div></div>
 <script>
 const PLOT=480;
 const CN={blobs:{a:"Youth",b:"Adults"},moons:{a:"Approved loans",b:"Rejected loans"},stripes:{a:"Default",b:"Repay"},spiral:{a:"Red path",b:"Blue path"},xor:{a:"Buy",b:"Don't Buy"},circular:{a:"Inner core",b:"Outer ring"}};
+const DESC={blobs:"Classification: Is this person a youth or an adult?",moons:"Classification: Will my loans get approved or rejected?",stripes:"Classification: Will this person repay the loans?",spiral:"Classification: Is this the red path or blue path?",xor:"Classification: Is this person likely to buy more products?"};
 const clamp=v=>Math.max(0,Math.min(1,v));
 function rng(s){s=s>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/0xffffffff}}
 function blobs(){const r=rng(7),p=[],c=[[.28,.32,0],[.72,.7,1],[.7,.28,0],[.3,.72,1]];for(const[cx,cy,l]of c)for(let i=0;i<22;i++)p.push({x:clamp(cx+(r()-.5)*.22),y:clamp(cy+(r()-.5)*.22),label:l});return p}
@@ -137,7 +140,8 @@ function render(){
   $("fitTag").textContent=fit.l;$("fitTag").className="dt-tag "+fit.t;$("fitHint").textContent=fit.h;
   if(latest)$("note").innerHTML=`<b>Latest split:</b> <code>${fcond(latest.split.feature,latest.split.threshold).replace("<","&lt;")}</code><div style="margin-top:4px">Chosen because it lowers Gini impurity the most. Resulting Gini: ${latest.split.gini.toFixed(2)}.</div>`;
   else $("note").textContent="No splits yet. Increase depth to make the tree start asking questions about the data.";
-  $("lA").textContent=CN[datasetKey].a;$("lB").textContent=CN[datasetKey].b;
+$("lA").textContent=CN[datasetKey].a;$("lB").textContent=CN[datasetKey].b;
+$("desc").textContent=DESC[datasetKey];
   $("dval").textContent=depth;$("depth").value=depth;
 }
 
