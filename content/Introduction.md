@@ -36,6 +36,6 @@ For example, if I ask you to guess a famous person I’m thinking of, a question
 Similarly, when building a Decision Tree, each branch should choose a question that would give it the most information possible, using the data it already has. This way, you'll able to reach the answer much faster.
 
 ### How do we pick the smartest question for each branch?
-The tree is basically an optimizer. It tries different features and thresholds, then eventually picks the question that reduces the most **uncertainty**. This is usually mathematically measured using criteria like **Entropy**, **Gini impurity**, or **Misclassification error**, and is selected through **Information gain**.
+The tree is basically an optimizer. It tries different features and thresholds, then eventually picks the question that reduces the most **uncertainty**. This is usually mathematically measured using criteria like **Entropy & Information gain**, **Gini impurity**, or **Misclassification error**.
 
 A much deeper dive on these criteria will be discussed in our next chapter.
