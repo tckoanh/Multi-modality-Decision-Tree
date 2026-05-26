@@ -13,7 +13,7 @@ A tree data structure, much like a real tree, grows from a root node and expands
 - Branches (internal nodes) have both incoming and outgoing edges, while leaves (external nodes) only have incoming edges.
 - Any two nodes connected by an edge have a parent–child relationship, with the edge pointing from the parent to the child.
 - Nodes that share the same parent are called siblings.
-- Tree depth: the number of edges from the root node to it furthest leaf.
+- Tree depth: the number of edges from the root node to its furthest leaf.
 
 ## What is a Decision Tree?
 A decision tree is a flow chart that helps make decisions by asking a series of simple questions, it is used for both Classification and Regression tasks. What this simply means is that it can be used to predict categorical data (like Dog or Cat), but it can also be used to predict a number (like housing prices). These 2 tasks essentially have the same structure, but with different output.
