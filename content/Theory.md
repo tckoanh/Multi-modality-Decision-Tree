@@ -1,17 +1,12 @@
 # Math foundations
 
-We can have inline equations like $E=mc^2$ or display equations like:
+To understand the mathematical foundations of Decision Trees, this chapter briefly reviews key concepts in Probability and Logarithms.
+You can skip this chapter and continue to the next one, and return here later if you get stuck on the formulas in the following sections.
 
-$$\oint_C \varphi$$
+## Probability
 
-(schrodinger)=
-$$
-i\hbar \frac{\partial \psi}{\partial t} = -\frac{\hbar^2}{2m}\nabla^2\psi + V\psi
-$$ 
+Probability is needed because decision trees work by looking at how data is distributed across classes in each node. To measure how “pure” or “mixed” a node is, we need to compute how likely each class is (for example, the fraction of data points belonging to each class). These probabilities are the building blocks for measures like Gini impurity, entropy, and information gain.
 
-We can link to equations using their labels, like equation {numref}`schrodinger` or with more emphasis: {numref}`eq {number} <schrodinger>`. See the [documentation](https://mystmd.org/guide/math) for more options with using formulas. You might be interested in [specific ways of numbering](https://mystmd.org/guide/cross-references#continuous-numbering). 
+## Logarithms
 
-```{tip}
-Check the hover-over functionality for these links!
-```
-
+Logarithms are used to measure uncertainty in a way that is easier to work with mathematically. They also help turn complicated multiplications of probabilities into simpler sums, which is important for entropy and information gain.
