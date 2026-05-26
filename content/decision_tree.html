@@ -55,7 +55,7 @@
     </div>
     <svg id="dt-plot" viewBox="-26 0 510 510" style="aspect-ratio:1;background:var(--muted);border-radius:6px"></svg>
     <div class="dt-row"><p style="margin:0">Filled dots = <b>training</b> data. Hollow rings = <b>test</b> data.</p>
-      <button id="dt-tog">Hide test</button></div>
+      <button id="dt-tog">Show test</button></div>
   </div>
   <div class="dt-card">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><h2 style="margin:0">The tree</h2><div id="dt-stats" style="font-size:12px;color:var(--mutfg)"></div></div>
@@ -94,7 +94,7 @@ function inter(n){return n.split?[n,...inter(n.left),...inter(n.right)]:[]}
 function acc(n,pts){if(!pts.length)return 0;const pr=p=>{let c=n;while(c.split)c=p[c.split.feature]<c.split.threshold?c.left:c.right;return c.prediction};return pts.filter(p=>pr(p)===p.label).length/pts.length}
 function layout(root){const lvs=[],walk=n=>n.split?(walk(n.left),walk(n.right)):lvs.push(n);walk(root);const xb=new Map();lvs.forEach((l,i)=>xb.set(l.id,(i+.5)/lvs.length));const nodes=[],edges=[],md=Math.max(...leaves(root).map(l=>l.depth),1);const place=(n,d)=>{let x;if(!n.split)x=xb.get(n.id);else{const L=place(n.left,d+1),R=place(n.right,d+1);x=(L.x+R.x)/2;const me={node:n,x,y:d/Math.max(1,md)};nodes.push(me);edges.push([me,L]);edges.push([me,R]);return me}const me={node:n,x,y:d/Math.max(1,md)};nodes.push(me);return me};place(root,0);return{nodes,edges}}
 
-let datasetKey="blobs",d=split(DS.blobs()),train=d.train,test=d.test,showTest=true,depth=0,playing=false,playId=null,draw="off",hover=null;
+let datasetKey="blobs",d=split(DS.blobs()),train=d.train,test=d.test,showTest=false,depth=0,playing=false,playId=null,draw="off",hover=null;
 
 const root=document.getElementById("decision-tree-demo");
 const $=id=>root.querySelector(`#dt-${id}`);
