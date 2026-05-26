@@ -3,6 +3,9 @@ project:
   toc:
     - file: content/Index.md
     - file: content/Theory.md
+      children:
+        - file: content/Logarithms.md
+        - file: Probability.md
     - file: content/ML-Overview.md
     - file: content/Introduction.md
     - file: content/Build.ipynb
