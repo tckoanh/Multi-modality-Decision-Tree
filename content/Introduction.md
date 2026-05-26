@@ -15,7 +15,7 @@ A tree data structure, much like a real tree, grows from a root node and expands
 - Nodes that share the same parent are called siblings.
 
 ## What is a Decision Tree?
-A decision tree is a flow chart that helps make decisions by asking a series of simple questions.
+A decision tree is a flow chart that helps make decisions by asking a series of simple questions, it is used for both Classification and Regression tasks. What this simply means is that it can be used to predict categorical data (like Dog or Cat), but it can also be used to predict a number (like housing prices). These 2 tasks essentially have the same structure, but with different output.
 
 Below is an example of a Decision Tree used for Classification, helping you decide which mode of transportation to take today. As shown in the figure, there are 4 things notable here:
 - Each internal node must have at least 2 children
