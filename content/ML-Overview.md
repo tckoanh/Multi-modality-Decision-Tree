@@ -63,5 +63,3 @@ It captures the true patterns without memorizing noise.
 A visulization of what Underfitting and Overfiiting can look like. Source: @analystprep_overfitting_cfa_l2
 
 ![alt text](figures/under_over_fit.jpg)
-
-
