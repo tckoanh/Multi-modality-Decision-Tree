@@ -5,7 +5,6 @@ Machine Learning is commonly divided into three main categories: Supervised Lear
 
 ![alt text](figures/MLoverview.png)
 
-
 ## Model Training, Testing, and Generalization
 When building a machine learning model, we split our data into two main parts: training data and testing data.
 
