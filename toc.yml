@@ -9,7 +9,7 @@ project:
     - file: content/ML-Overview.md
     - file: content/Introduction.md
     - file: content/Build.ipynb
-    - file: content/Methods.md
+    - file: content/Methods.ipynb
     - file: content/Conclusion.md
     # - title: Appendix
     #   children:
