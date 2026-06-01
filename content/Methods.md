@@ -1,10 +1,8 @@
 # A worked example
 
- <iframe
-  width="560px"
-  height="315px"
-  src="[https://www.youtube.com/embed/VIDEO_ID](https://youtu.be/_L39rN6gz7Y?si=VqLseq8MQhMmUlTS&t=200)"
-  title="YouTube video player"
-  frameborder="0"
+<iframe
+  src="https://www.canva.com/design/DAHLTLOrqfY/eALP8WrwB0Q9py-XE-6mcg/watch"
+  width="100%"
+  height="100%"
   allowfullscreen>
 </iframe>
